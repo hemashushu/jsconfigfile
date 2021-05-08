@@ -1,14 +1,10 @@
 const fs = require('fs');
 
-const AbstractConfigFile = require('./abstractconfigfile');
+const AbstractFileConfig = require('./abstractfileconfig');
 
-class JSONConfigFile extends AbstractConfigFile {
-    constructor(filePath) {
-        super(filePath);
-    }
-
-    load(callback) {
-        fs.readFile(this.filePath, 'utf-8', (err, lastConfigText) => {
+class JSONFileConfig extends AbstractFileConfig {
+    load(filePath, callback) {
+        fs.readFile(filePath, 'utf-8', (err, lastConfigText) => {
 			if (err) {
 				if (err.code === 'ENOENT') {
                     // 配置文件没找到，通过 callback 返回 undefined.
@@ -35,9 +31,9 @@ class JSONConfigFile extends AbstractConfigFile {
         });
     }
 
-    save(config, callback) {
+    save(filePath, config, callback) {
         let configText = JSON.stringify(config);
-        fs.writeFile(this.filePath, configText, 'utf-8', (err) => {
+        fs.writeFile(filePath, configText, 'utf-8', (err) => {
             if (err) {
 				callback(err);
 				return;
@@ -52,4 +48,4 @@ class JSONConfigFile extends AbstractConfigFile {
     }
 }
 
-module.exports = JSONConfigFile;
+module.exports = JSONFileConfig;

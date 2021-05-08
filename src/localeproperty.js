@@ -5,7 +5,7 @@
  * ---
  * Comment[en_GB]=Edit text files               ... #1
  * Comment[zh_CN]=编辑文本文件                   ... #2
- * Comment[zh_TW]=編輯文字檔                     ... #3
+ * Comment[zh_HK]=編輯文字檔                     ... #3
  * Comment[ja]=テキストファイルを編集します        ... #4
  * Comment=Edit text files                      ... #5
  * ---

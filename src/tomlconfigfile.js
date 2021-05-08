@@ -1,9 +1,9 @@
 const fs = require('fs');
-const jsyaml = require('js-yaml');
+const TOML = require('@iarna/toml');
 
 const AbstractFileConfig = require('./abstractfileconfig');
 
-class YAMLFileConfig extends AbstractFileConfig {
+class TOMLFileConfig extends AbstractFileConfig {
 
     load(filePath, callback) {
         fs.readFile(filePath, 'utf-8', (err, lastConfigText) => {
@@ -26,25 +26,20 @@ class YAMLFileConfig extends AbstractFileConfig {
 			}
 
             try{
-                // 当配置文件内容有错误时，jsyaml.load 会抛出
-                // YAMLException 异常，跟 JSON.parse 会抛出 SyntaxError 异常类似。
+                // 当配置文件内容有错误时，TOML.parse 会抛出异常，
                 // 为了统一、方便起见，这里把 YAMLException 捕捉并重新抛出 SyntaxError。
-				let config = jsyaml.load(lastConfigText);
+				let config = TOML.parse(lastConfigText);
                 callback(null, config);
 
             }catch(e) {
-				callback(new SyntaxError('Invalid YAML file content.'));
+				callback(new SyntaxError('Invalid TOML file content.'));
 			}
         });
     }
 
     save(filePath, config, callback) {
-		let options = {
-			skipInvalid: true
-		};
-
-        // jsyaml.dump 方法类似 JSON.stringify 方法。
-		let configText = jsyaml.dump(config, options);
+        // TOML.stringify 方法类似 JSON.stringify 方法。
+		let configText = TOML.stringify(config);
 
         fs.writeFile(filePath, configText, 'utf-8', (err) => {
             if (err) {
@@ -57,8 +52,8 @@ class YAMLFileConfig extends AbstractFileConfig {
     }
 
     static get extensionName() {
-        return '.yaml';
+        return '.toml';
     }
 }
 
-module.exports = YAMLFileConfig;
+module.exports = TOMLFileConfig;

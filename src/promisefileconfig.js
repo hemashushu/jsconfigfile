@@ -1,14 +1,14 @@
 /**
- * 对 AbstractConfigFile 的方法进行 Promise 封装。
+ * 对 AbstractFileConfig 的方法进行 Promise 封装。
  */
-class ConfigFilePromise {
-    constructor(abstractConfigFile) {
-        this.abstractConfigFile = abstractConfigFile;
+class PromiseFileConfig {
+    constructor(abstractFileConfig) {
+        this.abstractFileConfig = abstractFileConfig;
     }
 
-    load() {
+    load(filePath) {
         return new Promise((resolve, reject) => {
-            this.abstractConfigFile.load((err, config) => {
+            this.abstractFileConfig.load(filePath, (err, config) => {
                 if (err) {
                     reject(err);
                 }else {
@@ -18,9 +18,9 @@ class ConfigFilePromise {
         });
     }
 
-    save(config) {
+    save(filePath, config) {
         return new Promise((resolve, reject) => {
-            this.abstractConfigFile.save(config, (err)=> {
+            this.abstractFileConfig.save(filePath, config, (err)=> {
                 if (err) {
                     reject(err);
                 }else {
@@ -32,7 +32,7 @@ class ConfigFilePromise {
 
     update(partialConfig) {
         return new Promise((resolve, reject) => {
-            this.abstractConfigFile.update(partialConfig, (err, mergedConfig) => {
+            this.abstractFileConfig.update(partialConfig, (err, mergedConfig) => {
                 if (err) {
                     reject(err);
                 }else {
@@ -44,4 +44,4 @@ class ConfigFilePromise {
 
 }
 
-module.exports = ConfigFilePromise;
+module.exports = PromiseFileConfig;

@@ -1,5 +1,5 @@
 {
-  "name": "jsconfigfile",
+  "name": "jsfileconfig",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,23 +8,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hemashushu/jsconfigfile.git"
+    "url": "git+https://github.com/hemashushu/jsfileconfig.git"
   },
   "keywords": [
-    "digital",
-    "circuit",
-    "logic"
+    "config",
+    "json",
+    "yaml",
+    "toml"
   ],
   "author": "Hippo Spark <hippospark@gmail.com> (https://twitter.com/hemashushu)",
   "license": "SEE LICENSE IN <LICENSE.md>",
   "bugs": {
-    "url": "https://github.com/hemashushu/jsconfigfile/issues"
+    "url": "https://github.com/hemashushu/jsfileconfig/issues"
   },
-  "homepage": "https://github.com/hemashushu/jsconfigfile#readme",
+  "homepage": "https://github.com/hemashushu/jsfileconfig#readme",
   "devDependencies": {
-    "mocha": "^8.3.2"
+    "mocha": "^8.3.2",
+    "tmp": "^0.2.1"
   },
   "dependencies": {
+    "@iarna/toml": "^2.2.5",
     "js-yaml": "^4.0.0",
     "jsobjectutils": "github:hemashushu/jsobjectutils"
   }

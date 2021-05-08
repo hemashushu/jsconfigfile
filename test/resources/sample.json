@@ -1,7 +1,16 @@
 {
     "name": "foo",
-    "id": "123",
+    "id": 123,
     "text": "hello",
     "test[zh_CN]": "你好",
-    "test[jp]": "こんにちは"
+    "test[jp]": "こんにちは",
+    "enabled": true,
+    "addr": {
+        "city": "sz",
+        "postcode": "518000",
+        "street": [
+            "line1",
+            "line2"
+        ]
+    }
 }
