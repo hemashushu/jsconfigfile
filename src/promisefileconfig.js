@@ -30,9 +30,21 @@ class PromiseFileConfig {
         });
     }
 
-    update(partialConfig) {
+    update(filePath, partialConfig) {
         return new Promise((resolve, reject) => {
-            this.abstractFileConfig.update(partialConfig, (err, mergedConfig) => {
+            this.abstractFileConfig.update(filePath, partialConfig, (err, mergedConfig) => {
+                if (err) {
+                    reject(err);
+                }else {
+                    resolve(mergedConfig);
+                }
+            });
+        });
+    }
+
+    updateByFile(filePath, sourceFilePath) {
+        return new Promise((resolve, reject) => {
+            this.abstractFileConfig.updateByFile(filePath, sourceFilePath, (err, mergedConfig) => {
                 if (err) {
                     reject(err);
                 }else {
