@@ -8,8 +8,8 @@ class AbstractFileConfig {
     /**
      * 加载配置
      *
-     * 如果配置文件内容有（语法）错误而无法解析，会通过 callback
-     * 返回 SyntaxError 异常。
+     * 如果配置文件内容有错误（如语法错误，数据格式错误等）而无法解析，会通过 callback
+     * 返回 ParseException 异常。
      *
      * @param {*} filePath
      * @param {*} callback 返回 (err, config)，其中 config 可能是
@@ -48,7 +48,7 @@ class AbstractFileConfig {
      * - 无法使用该方法删除已存在的条目。
      * - 调用此方法时，需确认文件路径（filePath）当中的目录（file directory）
      *   已经存在，否则会抛出异常。
-     * - 如果配置文件内容有错误，会通过 callback 返回 SyntaxError 异常。
+     * - 如果配置文件内容有错误，会通过 callback 返回 ParseException 异常。
      *
      * @param {*} filePath
      * @param {*} partialConfig 由需更新的配置条目构成的对象，该对象将会
@@ -107,12 +107,13 @@ class AbstractFileConfig {
     }
 
     /**
-     * 通过另一个配置文件来更新配置文件。
+     * 通过另一个配置文件（参考配置文件）来更新配置文件。
      *
      * 只更新参考配置文件存在的条目，对于源配置已经存在，但参考配置不
      * 存在的条目，将会保持不变。
      *
-     * - 如果配置文件内容有错误，会通过 callback 返回 SyntaxError 异常。
+     * - 如果配置文件内容有错误，无论是参考配置文件，还是目标配置文件，
+     *   都会通过 callback 返回 ParseException 异常。
      *
      * @param {*} filePath
      * @param {*} sourceFilePath

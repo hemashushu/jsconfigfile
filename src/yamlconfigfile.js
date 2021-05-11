@@ -1,5 +1,6 @@
 const fs = require('fs');
 const jsyaml = require('js-yaml');
+const {ParseException} = require('jsexception');
 
 const AbstractFileConfig = require('./abstractfileconfig');
 
@@ -26,14 +27,14 @@ class YAMLFileConfig extends AbstractFileConfig {
 			}
 
             try{
-                // 当配置文件内容有错误时，jsyaml.load 会抛出
-                // YAMLException 异常，跟 JSON.parse 会抛出 SyntaxError 异常类似。
-                // 为了统一、方便起见，这里把 YAMLException 捕捉并重新抛出 SyntaxError。
+                // 当配置文件内容有错误时，jsyaml.load 会抛出 YAMLException 异常，
+                // 跟 JSON.parse 会抛出 SyntaxError 异常类似。
+                // 为了统一、方便起见，这里把 YAMLException 捕捉并重新抛出 ParseException。
 				let config = jsyaml.load(lastConfigText);
                 callback(null, config);
 
             }catch(e) {
-				callback(new SyntaxError('Invalid YAML file content.'));
+                callback(new ParseException('Cannot parse YAML config file content.', e));
 			}
         });
     }

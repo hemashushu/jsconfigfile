@@ -27,12 +27,13 @@ class TOMLFileConfig extends AbstractFileConfig {
 
             try{
                 // 当配置文件内容有错误时，TOML.parse 会抛出异常，
-                // 为了统一、方便起见，这里把 YAMLException 捕捉并重新抛出 SyntaxError。
+                // 跟 JSON.parse 会抛出 SyntaxError 异常类似。
+                // 为了统一、方便起见，这里把 TOML.parse 抛出的异常捕捉并重新抛出 ParseException。
 				let config = TOML.parse(lastConfigText);
                 callback(null, config);
 
             }catch(e) {
-				callback(new SyntaxError('Invalid TOML file content.'));
+				callback(new ParseException('Cannot parse TOML config file content.', e));
 			}
         });
     }
