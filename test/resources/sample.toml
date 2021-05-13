@@ -4,6 +4,8 @@ text = "hello"
 "test[zh_CN]" = "你好"
 "test[jp]" = "こんにちは"
 enabled = true
+category= "${locale.category}"
+title= "${locale.title}"
 
 [addr]
 city = "sz"

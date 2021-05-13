@@ -12,5 +12,7 @@
             "line1",
             "line2"
         ]
-    }
+    },
+    "category": "${locale.category}",
+    "title": "${locale.title}"
 }

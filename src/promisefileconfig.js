@@ -18,6 +18,32 @@ class PromiseFileConfig {
         });
     }
 
+    loadWithResolvePlaceholder(filePath, contextObject) {
+        return new Promise((resolve, reject) => {
+            this.abstractFileConfig.loadWithResolvePlaceholder(
+                filePath, contextObject, (err, config)=>{
+                if (err) {
+                    reject(err);
+                }else {
+                    resolve(config);
+                }
+            });
+        });
+    }
+
+    loadWithPreprocess(filePath, preprocessFunc) {
+        return new Promise((resolve, reject) => {
+            this.abstractFileConfig.loadWithPreprocess(
+                filePath, preprocessFunc, (err, config)=>{
+                if (err) {
+                    reject(err);
+                }else {
+                    resolve(config);
+                }
+            });
+        });
+    }
+
     save(filePath, config) {
         return new Promise((resolve, reject) => {
             this.abstractFileConfig.save(filePath, config, (err)=> {

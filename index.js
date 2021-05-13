@@ -1,13 +1,15 @@
 const AbstractFileConfig = require('./src/abstractfileconfig');
-const PromiseFileConfig = require('./src/promisefileconfig');
 const JSONFileConfig = require('./src/jsonfileconfig');
-const YAMLFileConfig = require('./src/yamlconfigfile');
 const LocaleProperty = require('./src/localeproperty');
+const PromiseFileConfig = require('./src/promisefileconfig');
+const TOMLFileConfig = require('./src/tomlconfigfile');
+const YAMLFileConfig = require('./src/yamlconfigfile');
 
 module.exports = {
     AbstractFileConfig: AbstractFileConfig,
-    PromiseFileConfig: PromiseFileConfig,
     JSONFileConfig: JSONFileConfig,
     LocaleProperty: LocaleProperty,
+    PromiseFileConfig: PromiseFileConfig,
+    TOMLFileConfig: TOMLFileConfig,
     YAMLFileConfig: YAMLFileConfig
 };

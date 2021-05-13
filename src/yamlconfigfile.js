@@ -6,7 +6,7 @@ const AbstractFileConfig = require('./abstractfileconfig');
 
 class YAMLFileConfig extends AbstractFileConfig {
 
-    load(filePath, callback) {
+    loadWithPreprocess(filePath, preprocessFunc, callback) {
         fs.readFile(filePath, 'utf-8', (err, lastConfigText) => {
 			if (err) {
 				if (err.code === 'ENOENT') {
@@ -27,10 +27,11 @@ class YAMLFileConfig extends AbstractFileConfig {
 			}
 
             try{
+                let resolvedText = preprocessFunc(lastConfigText);
                 // 当配置文件内容有错误时，jsyaml.load 会抛出 YAMLException 异常，
                 // 跟 JSON.parse 会抛出 SyntaxError 异常类似。
                 // 为了统一、方便起见，这里把 YAMLException 捕捉并重新抛出 ParseException。
-				let config = jsyaml.load(lastConfigText);
+				let config = jsyaml.load(resolvedText);
                 callback(null, config);
 
             }catch(e) {

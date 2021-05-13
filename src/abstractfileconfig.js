@@ -1,4 +1,5 @@
-const ObjectUtils = require('jsobjectutils');
+const {ObjectUtils} = require('jsobjectutils');
+const {StringUtils} = require('jsstringutils');
 
 /**
  * 文件型配置
@@ -17,7 +18,50 @@ class AbstractFileConfig {
      *     内容是空的，则 config 的值为 undefined.
      */
     load(filePath, callback) {
-        //
+        let preprocessFunc = (text) => {
+            return text;
+        };
+
+        this.loadWithPreprocess(filePath, preprocessFunc, (err, lastConfig) => {
+            if (err){
+                callback(err);
+                return;
+            }
+
+            callback(null, lastConfig);
+        });
+    }
+
+    loadWithResolvePlaceholder(filePath, contextObject, callback) {
+        let preprocessFunc = (text) => {
+            return StringUtils.resolvePlaceholderByContextObject(text, contextObject);
+        };
+
+        this.loadWithPreprocess(filePath, preprocessFunc, (err, lastConfig) => {
+            if (err){
+                callback(err);
+                return;
+            }
+
+            callback(null, lastConfig);
+        });
+    }
+
+    /**
+     * 带文本预处理的配置加载方法
+     *
+     *
+     * @param {*} filePath
+     * @param {*} preprocessFunc 文本预处理方法，该方法允许在解析配置文件的文本
+     *     之前，先作一些预处理，比如解析文本当中的占位符等。方法的签名为：
+     *     function preprocessFunc(text) {
+     *         return 'new text';
+     *     }
+     *     其中 'text' 为文件的原始文本，有可能为空字符串。
+     * @param {*} callback
+     */
+    loadWithPreprocess(filePath, preprocessFunc, callback) {
+        // 待子类实现
     }
 
     /**
@@ -37,7 +81,7 @@ class AbstractFileConfig {
      * @param {*} callback 返回 (err)
      */
     save(filePath, config, callback) {
-        //
+        // 待子类实现
     }
 
     /**
@@ -145,7 +189,6 @@ class AbstractFileConfig {
     static get extensionName() {
         return '.config';
     }
-
 }
 
 module.exports = AbstractFileConfig;

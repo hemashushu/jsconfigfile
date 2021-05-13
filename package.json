@@ -30,6 +30,7 @@
     "@iarna/toml": "^2.2.5",
     "js-yaml": "^4.0.0",
     "jsexception": "github:hemashushu/jsexception",
-    "jsobjectutils": "github:hemashushu/jsobjectutils"
+    "jsobjectutils": "github:hemashushu/jsobjectutils",
+    "jsstringutils": "github:hemashushu/jsstringutils"
   }
 }

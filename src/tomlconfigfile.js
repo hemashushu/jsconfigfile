@@ -1,11 +1,12 @@
 const fs = require('fs');
 const TOML = require('@iarna/toml');
+const {ParseException} = require('jsexception');
 
 const AbstractFileConfig = require('./abstractfileconfig');
 
 class TOMLFileConfig extends AbstractFileConfig {
 
-    load(filePath, callback) {
+    loadWithPreprocess(filePath, preprocessFunc, callback) {
         fs.readFile(filePath, 'utf-8', (err, lastConfigText) => {
 			if (err) {
 				if (err.code === 'ENOENT') {
@@ -26,10 +27,11 @@ class TOMLFileConfig extends AbstractFileConfig {
 			}
 
             try{
+                let resolvedText = preprocessFunc(lastConfigText);
                 // 当配置文件内容有错误时，TOML.parse 会抛出异常，
                 // 跟 JSON.parse 会抛出 SyntaxError 异常类似。
                 // 为了统一、方便起见，这里把 TOML.parse 抛出的异常捕捉并重新抛出 ParseException。
-				let config = TOML.parse(lastConfigText);
+				let config = TOML.parse(resolvedText);
                 callback(null, config);
 
             }catch(e) {

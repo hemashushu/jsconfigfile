@@ -2,7 +2,7 @@ const fs = require('fs');
 const tmp = require('tmp');
 const path = require('path');
 
-const ObjectUtils = require('jsobjectutils');
+const {ObjectUtils} = require('jsobjectutils');
 const assert = require('assert/strict');
 
 const JSONFileConfig = require('../src/jsonfileconfig');
@@ -20,6 +20,38 @@ let testLoad = (filePath, fileConfig, done) => {
         assert.equal(config.name, 'foo');
         assert.equal(config.text, 'hello');
         assert.equal(config.enabled, true);
+        assert.equal(config.category, '${locale.category}');
+        assert.equal(config.title, '${locale.title}');
+
+        let addrObject = config.addr;
+        assert.equal(addrObject.city, 'sz');
+        assert.equal(addrObject.postcode, '518000');
+        assert(ObjectUtils.arrayEquals(addrObject.street, ['line1', 'line2']));
+
+        done();
+    });
+};
+
+let testLoadWithResolvePlaceholder = (filePath, fileConfig, done) => {
+    let contextObject = {
+        locale: {
+            category: '类别',
+            title: '标题'
+        }
+    };
+
+    fileConfig.loadWithResolvePlaceholder(filePath, contextObject, (err, config) => {
+        if (err) {
+            assert.fail(err.message);
+            return;
+        }
+
+        assert.equal(config.id, 123);
+        assert.equal(config.name, 'foo');
+        assert.equal(config.text, 'hello');
+        assert.equal(config.enabled, true);
+        assert.equal(config.category, '类别');
+        assert.equal(config.title, '标题');
 
         let addrObject = config.addr;
         assert.equal(addrObject.city, 'sz');
@@ -199,6 +231,7 @@ let testUpdateByFile = (sourceFilePath, fileConfig, done) => {
 };
 
 describe('File Config Test', () => {
+
     let items = [
         {name: 'JSON File Config', clazz: JSONFileConfig, fileName: 'sample.json', extensionName: '.json'},
         {name: 'YAML File Config', clazz: YAMLFileConfig, fileName: 'sample.yaml', extensionName: '.yaml'},
@@ -217,6 +250,10 @@ describe('File Config Test', () => {
 
             it('Test load()', (done) => {
                 testLoad(configFilePath, fileConfig, done);
+            });
+
+            it('Test loadWithResolvePlaceholder()', (done) => {
+                testLoadWithResolvePlaceholder(configFilePath, fileConfig, done);
             });
 
             it('Test save()', (done) => {
