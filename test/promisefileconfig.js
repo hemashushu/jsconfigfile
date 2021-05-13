@@ -83,9 +83,11 @@ describe('Promise File Config Test', () => {
                 assert(!keys.includes('name'));
                 assert(!keys.includes('text'));
                 assert(!keys.includes('enabled'));
-                assert(!keys.includes('category'));
-                assert(!keys.includes('title'));
-                assert(!keys.includes('addr'));
+
+                // ('name' in object) = Object.keys(object).includes('name')
+                assert(!('category' in config));
+                assert(!('title' in config));
+                assert(!('addr' in config));
 
                 assert.equal(config.name1, 'value1');
                 assert.equal(config.name2, 'value2');

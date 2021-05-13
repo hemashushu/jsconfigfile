@@ -14,8 +14,9 @@ class AbstractFileConfig {
      *
      * @param {*} filePath
      * @param {*} callback 返回 (err, config)，其中 config 可能是
-     *     一个纯数据对象，或者是一个纯数据数组。如果文件不存在或者文件
-     *     内容是空的，则 config 的值为 undefined.
+     *     - 一个纯数据对象；
+     *     - 一个纯数据数组；
+     *     - undefined：当文件不存在或者文件内容是空的
      */
     load(filePath, callback) {
         let preprocessFunc = (text) => {
