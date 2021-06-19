@@ -5,9 +5,9 @@ const path = require('path');
 const {ObjectUtils} = require('jsobjectutils');
 const assert = require('assert/strict');
 
-const JSONFileConfig = require('../src/jsonfileconfig');
-const YAMLFileConfig = require('../src/yamlconfigfile');
-const TOMLFileConfig = require('../src/tomlconfigfile');
+const {JSONFileConfig,
+    YAMLFileConfig,
+    TOMLFileConfig} = require('../index');
 
 let testLoad = (filePath, fileConfig, done) => {
     fileConfig.load(filePath, (err, config) => {

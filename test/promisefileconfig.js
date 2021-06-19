@@ -1,12 +1,16 @@
 const fs = require('fs');
+const fsPromise = require('fs/promises');
 const tmp = require('tmp');
+const tmpPromise = require('tmp-promise');
 const path = require('path');
 
 const { ObjectUtils } = require('jsobjectutils');
 const assert = require('assert/strict');
 
-const YAMLFileConfig = require('../src/yamlconfigfile');
-const PromiseFileConfig = require('../src/promisefileconfig');
+const { JSONFileConfig,
+    YAMLFileConfig,
+    TOMLFileConfig,
+    PromiseFileConfig } = require('../index');
 
 describe('Promise File Config Test', () => {
     it('Test load()', (done) => {
@@ -239,5 +243,46 @@ describe('Promise File Config Test', () => {
         });
     });
 
+    it('Test async/await', async () => {
+        let fileConfig = new JSONFileConfig();
+        let promiseFileConfig = new PromiseFileConfig(fileConfig);
+
+        let config = {
+            id: 123,
+            name: 'foo',
+            creationTime: new Date(1),
+            addr: {
+                city: 'sz'
+            },
+            scores: [1, 2, 3]
+        };
+
+        let tempFilePath = await tmpPromise.tmpName();
+        await promiseFileConfig.save(tempFilePath, config);
+        let lastConfig = await promiseFileConfig.load(tempFilePath);
+
+        // JSON parse can not convert date time string into Date
+        let resolvedConfig = ObjectUtils.clone(lastConfig, {
+            creationTime: (oldValue) => {
+                if (oldValue instanceof Date) {
+                    return oldValue;
+                } else {
+                    // oldValue is a String
+                    // convert string into Date: new Date(Date.parse(oldValue))
+                    return new Date(oldValue);
+                }
+            }
+        });
+
+        assert(ObjectUtils.objectEquals(resolvedConfig, config));
+
+        resolvedConfig.name = 'bar'; // update the value of 'name' property
+        await promiseFileConfig.update(tempFilePath, resolvedConfig)
+        let updatedConfig = await promiseFileConfig.load(tempFilePath);
+        assert.equal(updatedConfig.name, 'bar');
+
+        await fsPromise.unlink(tempFilePath);
+    });
 });
+
 

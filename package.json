@@ -31,6 +31,7 @@
     "js-yaml": "^4.0.0",
     "jsexception": "github:hemashushu/jsexception",
     "jsobjectutils": "github:hemashushu/jsobjectutils",
-    "jsstringutils": "github:hemashushu/jsstringutils"
+    "jsstringutils": "github:hemashushu/jsstringutils",
+    "tmp-promise": "^3.0.2"
   }
 }

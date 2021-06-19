@@ -1,7 +1,7 @@
 const { ObjectUtils } = require('jsobjectutils');
 const assert = require('assert/strict');
 
-const LocaleProperty = require('../src/localeproperty');
+const {LocaleProperty} = require('../index');
 
 describe('Locale Property Test', () => {
     it('Test getValue()', () => {
