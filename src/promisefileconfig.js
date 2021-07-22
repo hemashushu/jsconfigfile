@@ -6,6 +6,18 @@ class PromiseFileConfig {
         this.abstractFileConfig = abstractFileConfig;
     }
 
+    /**
+     * - 如果配置文件内容有错误（如语法错误，数据格式错误等）而无法解析，则抛出
+     *   ParseException 异常。
+     * - 如果文件找不到，则抛出 FileNotFound 异常。
+     * - 如果出现其他 IO 错误，则抛出 IOException 对象。
+     *
+     * @param {*} filePath
+     * @returns 值可能是
+     *     - 一个纯数据对象；
+     *     - 一个纯数据数组；
+     *     - undefined：当文件内容是空的
+     */
     load(filePath) {
         return new Promise((resolve, reject) => {
             this.abstractFileConfig.load(filePath, (err, config) => {

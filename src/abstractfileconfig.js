@@ -1,5 +1,6 @@
-const {ObjectUtils} = require('jsobjectutils');
-const {StringUtils} = require('jsstringutils');
+const { ObjectUtils } = require('jsobjectutils');
+const { StringUtils } = require('jsstringutils');
+const { IllegalArgumentException } = require('jsexception');
 
 /**
  * 文件型配置
@@ -9,14 +10,16 @@ class AbstractFileConfig {
     /**
      * 加载配置
      *
-     * 如果配置文件内容有错误（如语法错误，数据格式错误等）而无法解析，会通过 callback
-     * 返回 ParseException 异常。
+     * - 如果配置文件内容有错误（如语法错误，数据格式错误等）而无法解析，会通过 callback
+     *   返回 ParseException 异常。
+     * - 如果文件找不到，会通过 callback 返回 FileNotFound 异常。
+     * - 如果出现其他 IO 错误，会通过 callback 返回 IOException 对象。
      *
      * @param {*} filePath
-     * @param {*} callback 返回 (err, config)，其中 config 可能是
+     * @param {*} callback (err, config)，其中 config 可能是
      *     - 一个纯数据对象；
      *     - 一个纯数据数组；
-     *     - undefined：当文件不存在或者文件内容是空的
+     *     - undefined：当文件内容是空的
      */
     load(filePath, callback) {
         let preprocessFunc = (text) => {
@@ -24,7 +27,7 @@ class AbstractFileConfig {
         };
 
         this.loadWithPreprocess(filePath, preprocessFunc, (err, lastConfig) => {
-            if (err){
+            if (err) {
                 callback(err);
                 return;
             }
@@ -39,7 +42,7 @@ class AbstractFileConfig {
         };
 
         this.loadWithPreprocess(filePath, preprocessFunc, (err, lastConfig) => {
-            if (err){
+            if (err) {
                 callback(err);
                 return;
             }
@@ -79,7 +82,7 @@ class AbstractFileConfig {
      *
      * @param {*} filePath
      * @param {*} config 纯数据对象或者纯数据数组
-     * @param {*} callback 返回 (err)
+     * @param {*} callback (err)
      */
     save(filePath, config, callback) {
         // 待子类实现
@@ -103,12 +106,12 @@ class AbstractFileConfig {
      *     - 如果 partialConfig 某项的值为 undefined，则不会更新源配置的该项。
      *     - partialConfig 必须是一个纯数据对象，不能是数组（Array），否则
      *       会抛出 TypeError 异常。
-     * @param {*} callback 返回 (err, mergedConfig)，其中 mergedConfig
+     * @param {*} callback (err, mergedConfig)，其中 mergedConfig
      *     为已合并的配置对象，即最终的配置文件的对象。
      */
     update(filePath, partialConfig, callback) {
         if (!ObjectUtils.isObject(partialConfig)) {
-            callback(new TypeError('partialConfig should be a pure data object.'));
+            callback(new IllegalArgumentException('partialConfig should be a pure data object.'));
             return;
         }
 
@@ -162,7 +165,7 @@ class AbstractFileConfig {
      *
      * @param {*} filePath
      * @param {*} sourceFilePath
-     * @param {*} callback 返回 (err, mergedConfig)，其中 mergedConfig
+     * @param {*} callback (err, mergedConfig)，其中 mergedConfig
      *     为已合并的配置对象，即最终的配置文件的对象。
      */
     updateByFile(filePath, sourceFilePath, callback) {
