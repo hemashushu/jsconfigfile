@@ -18,10 +18,13 @@ class JSONFileConfig extends AbstractFileConfig {
                 return;
             }
 
+            // 去除前后空格
+            lastConfigText = lastConfigText.trim();
+
             if (lastConfigText === '') {
-                // 配置文件是空的，通过 callback 返回 undefined.
-                // config file content is empty, return undefined by callback.
-                callback();
+                // 配置文件是空的，通过 callback 返回 {}.
+                // config file content is empty, return {} by callback.
+                callback(null, {});
                 return;
             }
 

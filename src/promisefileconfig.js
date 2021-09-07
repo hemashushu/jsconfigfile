@@ -13,10 +13,10 @@ class PromiseFileConfig {
      * - 如果出现其他 IO 错误，则抛出 IOException 对象。
      *
      * @param {*} filePath
-     * @returns 值可能是
-     *     - 一个纯数据对象；
-     *     - 一个纯数据数组；
-     *     - undefined：当文件内容是空的
+     * @returns 值是纯数据对象。
+     *     - 本模块不支持内容为非数据对象的配置文件，比如内容是一个数组或者一个字符串这种；
+     *     - 当文件内容是空时，返回一个空数据对象：{}
+     *     - 当文件无实际内容时，比如只有注释，返回一个空数据对象：{}
      */
     load(filePath) {
         return new Promise((resolve, reject) => {

@@ -9,7 +9,6 @@ const assert = require('assert/strict');
 
 const { JSONFileConfig,
     YAMLFileConfig,
-    TOMLFileConfig,
     PromiseFileConfig } = require('../index');
 
 describe('Promise File Config Test', () => {

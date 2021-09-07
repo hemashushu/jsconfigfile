@@ -16,10 +16,10 @@ class AbstractFileConfig {
      * - 如果出现其他 IO 错误，会通过 callback 返回 IOException 对象。
      *
      * @param {*} filePath
-     * @param {*} callback (err, config)，其中 config 可能是
-     *     - 一个纯数据对象；
-     *     - 一个纯数据数组；
-     *     - undefined：当文件内容是空的
+     * @param {*} callback (err, config)，其中 config 可能是纯数据对象。
+     *     - 本模块不支持内容为非数据对象的配置文件，比如内容是一个数组或者一个字符串这种；
+     *     - 当文件内容是空时，返回一个空数据对象：{}
+     *     - 当文件无实际内容时，比如只有注释，返回一个空数据对象：{}
      */
     load(filePath, callback) {
         let preprocessFunc = (text) => {
@@ -91,8 +91,6 @@ class AbstractFileConfig {
     /**
      * 更新配置。
      *
-     * - 只更新 partialConfig 存在的条目，对于源配置已经存在，但 partialConfig 不
-     *   存在的条目，将会保持不变。
      * - 无法使用该方法删除已存在的条目。
      * - 调用此方法时，需确认文件路径（filePath）当中的目录（file directory）
      *   已经存在，否则会抛出异常。
@@ -101,6 +99,9 @@ class AbstractFileConfig {
      * @param {*} filePath
      * @param {*} partialConfig 由需更新的配置条目构成的对象，该对象将会
      *     跟配置文件已存在的条目进行合并，然后写入配置文件。
+     *     - partialConfig 存储的是需要更新的条目，而不是配置文件的完整内容。
+     *       比如当调用者只想更新某项值时，partialConfig 只需放置该项的 key name 和 key value。
+     *     - 对于源配置文件已存在的，但 partialConfig 里没有出现的项目，其值将保持不变。
      *     - 对于使用 “默认值配置”+“用户配置” 策略的应用程序，建议在更新
      *       配置之前先移除默认值。
      *     - 如果 partialConfig 某项的值为 undefined，则不会更新源配置的该项。
@@ -157,8 +158,8 @@ class AbstractFileConfig {
     /**
      * 通过另一个配置文件（参考配置文件）来更新配置文件。
      *
-     * 只更新参考配置文件存在的条目，对于源配置已经存在，但参考配置不
-     * 存在的条目，将会保持不变。
+     * 参考配置文件的内容是待更新的条目，而不必是完整的配置内容。
+     * 对于源配置文件已存在的，而参考配置不存在的条目，将会保持不变。
      *
      * - 如果配置文件内容有错误，无论是参考配置文件，还是目标配置文件，
      *   都会通过 callback 返回 ParseException 异常。
