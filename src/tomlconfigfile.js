@@ -30,18 +30,21 @@ class TOMLFileConfig extends AbstractFileConfig {
                 return;
             }
 
+            let config;
             try {
                 let resolvedText = preprocessFunc(lastConfigText);
                 // 当配置文件内容有错误时，TOML.parse 会抛出异常，
                 // 跟 JSON.parse 会抛出 SyntaxError 异常类似。
                 // 为了统一、方便起见，这里把 TOML.parse 抛出的异常捕捉并重新抛出 ParseException。
-                let config = TOML.parse(resolvedText);
-                callback(null, config);
+                config = TOML.parse(resolvedText);
 
             } catch (e) {
                 callback(new ParseException(
                     `Can not parse the content of TOML config file: ${filePath}`, e));
             }
+
+            // 避免将 callback 放在 try {} 语句之内，因为调用者后续的错误会被返回到这里的 catch {}。
+            callback(null, config);
         });
     }
 

@@ -28,17 +28,20 @@ class JSONFileConfig extends AbstractFileConfig {
                 return;
             }
 
+            let config;
+
             // 当配置文件内容有错误时，JSON.parse 方法会抛出 SyntaxError 异常
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
             try {
                 let resolvedText = preprocessFunc(lastConfigText);
-                let config = JSON.parse(resolvedText);
-                callback(null, config);
-
+                config = JSON.parse(resolvedText);
             } catch (e) {
                 callback(new ParseException(
                     `Can not parse the content of JSON config file: ${filePath}`, e));
             }
+
+            // 避免将 callback 放在 try {} 语句之内，因为调用者后续的错误会被返回到这里的 catch {}。
+            callback(null, config);
 
         });
     }
